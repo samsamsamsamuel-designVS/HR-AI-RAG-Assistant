@@ -34,7 +34,7 @@ settings = dotenv_values(ROOT / ".env")
 api_key = (os.getenv("OPENAI_API_KEY", settings.get("OPENAI_API_KEY") or "")).strip()
 model = st.session_state.model_name
 # Streamlit commands create the page elements in the order they run.
-st.title("HR Employment Assistant")
+st.title("HR AI Employment Assistant")
 st.caption("Ask your HR documents. Get clear answers with evidence you can check.")
 
 # This decorator caches the function result based on its input arguments.
