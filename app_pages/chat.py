@@ -13,7 +13,7 @@ import streamlit as st
 from dotenv import dotenv_values
 from openai import AuthenticationError, RateLimitError, APIConnectionError, APIStatusError
 
-from library import DATA_DIRECTORY, pdf_paths
+from library import DATA_DIRECTORY, display_pdf_name, pdf_paths
 from rag import (
     DATABASE_PATH,
     read_source_pdf,
@@ -55,7 +55,7 @@ def show_evidence(answer, evidence):
         with st.expander("View source passages", icon=":material/library_books:"):
             for i, chunk, _ in cited:
                 # Keep the original citation label, even if only [2] was cited.
-                st.markdown(f"**[{i}] {chunk.source} · PDF page {chunk.page}**")
+                st.markdown(f"**[{i}] {display_pdf_name(chunk.source)} · PDF page {chunk.page}**")
                 st.text(chunk.text)
 
 
