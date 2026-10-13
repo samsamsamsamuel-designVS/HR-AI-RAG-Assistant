@@ -13,7 +13,7 @@ from library import render_library, save_uploads
 from utility import account_menu, require_login
 
 # Configure the browser tab and layout before drawing the pages.
-st.set_page_config(page_title="HR Employment Assistant ", page_icon=":material/forum:", layout="wide")
+st.set_page_config(page_title="HR AI Employment Assistant ", page_icon=":material/forum:", layout="wide")
 
 # Match page-title underlines to the section dividers, including on login.
 # Read the divider palette color so it can be changed in config.toml.
