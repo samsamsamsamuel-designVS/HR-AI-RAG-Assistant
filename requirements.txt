@@ -1,0 +1,10 @@
+streamlit>=1.64,<2
+openai>=2,<4
+pypdf>=6,<7
+fonttools>=4,<5
+langchain-core>=1,<2
+langchain-openai>=1,<2
+langchain-chroma>=1,<2
+langchain-text-splitters>=1,<2
+chromadb>=1,<2
+python-dotenv>=1,<2
