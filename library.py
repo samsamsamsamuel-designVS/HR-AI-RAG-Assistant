@@ -16,6 +16,11 @@ from rag import DATABASE_PATH, SOURCE_LOCK, read_source_pdf
 DATA_DIRECTORY = Path(__file__).resolve().parent / "Data"
 
 
+def display_pdf_name(name):
+    """Hide the generated storage hash in user-facing PDF names."""
+    return re.sub(r"_[0-9a-f]{16}(?=\.pdf$)", "", name, flags=re.IGNORECASE)
+
+
 def pdf_paths(directory=None):
     """List PDFs inside the library, excluding links outside its directory."""
     root = Path(directory or DATA_DIRECTORY).resolve()
@@ -94,6 +99,7 @@ def save_uploads(widget_key):
     for upload in st.session_state.get(widget_key, []) or []:
         try:
             name, created = save_pdf(upload.name, upload.getvalue())
+            name = display_pdf_name(name)
             notices.append(("success", f"Saved {name}." if created else f"{name} is already in the library."))
         except Exception as exc:
             notices.append(("error", f"Could not save {upload.name}: {exc}"))
@@ -111,14 +117,14 @@ def render_library():
     st.metric("Available documents", len(names))
     with st.expander("Document library", expanded=False):
         for number, name in enumerate(names, start=1):
-            st.text(f"{number}. {name}")
+            st.text(f"{number}. {display_pdf_name(name)}")
         if not names:
             st.caption("Upload a PDF to add it to the library.")
         else:
             st.caption("Deleting PDFs removes them from the shared library and clears this chat.")
             # A form waits for submit rather than deleting on selection changes.
             with st.form("delete_documents"):
-                selected = st.multiselect("Select PDFs to delete", names, key="delete_selection")
+                selected = st.multiselect("Select PDFs to delete", names, format_func=display_pdf_name, key="delete_selection")
                 submitted = st.form_submit_button("Delete selected PDFs", icon=":material/delete:", key="delete_pdfs")
             if submitted:
                 if not selected:
