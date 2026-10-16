@@ -14,6 +14,11 @@ import streamlit as st
 from rag import DATABASE_PATH, SOURCE_LOCK, read_source_pdf
 
 DATA_DIRECTORY = Path(__file__).resolve().parent / "Data"
+PRELOADED_PDFS = frozenset({
+    "cpf_contribution.pdf",
+    "employment-act.pdf",
+    "workplace_safety_health.pdf",
+})
 
 
 def display_pdf_name(name):
@@ -72,6 +77,8 @@ def delete_pdfs(names, directory=None, database=None):
         target = (root / name).resolve()
         if not target.is_relative_to(root) or target.suffix.lower() != ".pdf" or not target.is_file():
             raise ValueError("Select an existing PDF from the document library.")
+        if target.relative_to(root).as_posix().casefold() in PRELOADED_PDFS:
+            raise ValueError("Preloaded PDFs cannot be deleted. Select an uploaded PDF.")
         targets.append((target, target.relative_to(root).as_posix()))
     with SOURCE_LOCK:
         # Opening the saved collection for deletion requires no embedding API.
@@ -114,6 +121,7 @@ def render_library():
     """Show the shared PDF list and a form for deleting selected documents."""
     paths = pdf_paths()
     names = [path.relative_to(DATA_DIRECTORY.resolve()).as_posix() for path in paths]
+    deletable_names = [name for name in names if name.casefold() not in PRELOADED_PDFS]
     st.metric("Available documents", len(names))
     with st.expander("Document library", expanded=False):
         for number, name in enumerate(names, start=1):
@@ -121,11 +129,11 @@ def render_library():
         if not names:
             st.caption("Upload a PDF to add it to the library.")
         else:
-            st.caption("Deleting PDFs removes them from the shared library and clears this chat.")
+            st.caption("Only uploaded PDFs can be deleted. Deleting PDFs removes them from the shared library and clears this chat.")
             # A form waits for submit rather than deleting on selection changes.
             with st.form("delete_documents"):
-                selected = st.multiselect("Select PDFs to delete", names, format_func=display_pdf_name, key="delete_selection")
-                submitted = st.form_submit_button("Delete selected PDFs", icon=":material/delete:", key="delete_pdfs")
+                selected = st.multiselect("Select PDFs to delete", deletable_names, format_func=display_pdf_name, key="delete_selection", disabled=not deletable_names)
+                submitted = st.form_submit_button("Delete selected PDFs", icon=":material/delete:", key="delete_pdfs", disabled=not deletable_names)
             if submitted:
                 if not selected:
                     st.warning("Select at least one PDF to delete.")
