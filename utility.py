@@ -42,7 +42,7 @@ def require_login() -> None:
     with st.sidebar:
         st.header("Account", divider="orange")
         st.caption("Please log in to continue.")
-    st.title("HR AI Employment Assistant 🗪")
+    st.title("HR AI Employment Assistant")
     st.markdown("Log in to ask questions, upload new PDF knowledge, and explore your documents.")
     ready = bool(configured_passwords())
     # A form submits both inputs together. The callback runs before the next
@@ -115,7 +115,7 @@ def require_login() -> None:
     with st.sidebar:
         st.header("Account", divider="orange")
         st.caption("Please log in to continue.")
-    st.title("HR AI Employment Assistant 🗪")
+    st.title("HR AI Employment Assistant")
     st.markdown("Log in to ask questions, upload new PDF knowledge, and explore your documents.")
     ready = bool(configured_passwords())
     # A form submits both inputs together. The callback runs before the next
