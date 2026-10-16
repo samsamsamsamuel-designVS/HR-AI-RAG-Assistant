@@ -31,7 +31,7 @@ st.graphviz_chart(
         }
         db -> search [label="PDF evidence"];
     }''',
-    width=640,
+    width=850,
     alt="PDFs are read, split, embedded and saved in Chroma. A question and recent chat guide passage retrieval; the AI streams an answer with citations for the user to check.",
 )
 st.caption("Preparation reuses cached text and existing embeddings. Each question searches the library; the answer model receives selected passages rather than every PDF.")
