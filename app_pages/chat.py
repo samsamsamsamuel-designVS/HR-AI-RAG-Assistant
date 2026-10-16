@@ -169,14 +169,10 @@ with st.bottom:
         max_chars=4000,
     )
     st.caption(
-        "**Prototype / Proof of Concept:** This assistant is a learning and demonstration project. "
-        "AI-generated responses rely on the available documents and may contain errors, omissions, "
-        "or outdated information. They provide general information only and are not a substitute "
-        "for professional HR, legal, or financial advice. Before making employment or compliance "
-        "decisions, verify answers against the cited sources and current official guidance, "
-        "and seek advice from a qualified professional. Do not enter or upload personal, "
-        "confidential, or sensitive information. Uploaded PDFs are stored in a shared library "
-        "and are available to other users of this app."
+        "**Prototype / Proof of Concept:** For learning and demonstration only. AI answers may be "
+        "inaccurate or outdated and do not replace professional advice. Verify information with "
+        "official sources before acting. Do not share sensitive information; uploaded PDFs are "
+        "available to other app users."
     )
 if starter_question and can_ask:
     question = starter_question
