@@ -185,8 +185,28 @@ if question:
         if not message.get("failed")
     ]
     st.session_state.messages.append({"role": "user", "content": question})
+    # A fresh anchor makes each submission scroll once, including repeated
+    # questions and new conversations after Clear chat.
+    scroll_sequence = st.session_state.get("question_scroll_sequence", 0) + 1
+    st.session_state.question_scroll_sequence = scroll_sequence
     with st.chat_message("user", avatar=":material/face_5:"):
+        st.html(f'<div id="question-{scroll_sequence}" style="scroll-margin-top: 5rem;"></div>')
         st.markdown(question)
+    # Wait for the question to reach the browser layout before scrolling.
+    # Only our numeric anchor is interpolated; question text stays in Markdown.
+    st.html(
+        f"""<script>
+        requestAnimationFrame(() => {{
+            requestAnimationFrame(() => {{
+                document.getElementById("question-{scroll_sequence}")?.scrollIntoView({{
+                    behavior: "smooth",
+                    block: "start"
+                }});
+            }});
+        }});
+        </script>""",
+        unsafe_allow_javascript=True,
+    )
     with st.chat_message("assistant", avatar=":material/robot_2:"):
         try:
             with st.spinner("Finding relevant passages…"):
