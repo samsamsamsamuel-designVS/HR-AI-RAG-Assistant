@@ -1,24 +1,85 @@
-"""Introduce the app without inventing organization or team details."""
+"""Introduce the prototype and help first-time users explore its PDF library."""
 import streamlit as st
 
 st.title("About us", anchor=False)
-st.caption("Making HR employment knowledge easier to find and understand.")
-st.markdown("The **HR Employment Assistant** helps users explore HR documents through a conversation. It brings the project's PDF library and additional uploaded knowledge into one place, then provides answers with source passages you can check.")
+st.caption("Explore HR documents. Ask questions. Check the evidence.")
+st.markdown(
+    "The **HR AI Employment Assistant** is a prototype / proof of concept built for learning "
+    "and demonstration. It helps you explore employment-related PDFs through conversation, "
+    "with numbered citations and source passages you can check."
+)
 
 with st.container(border=True):
     st.subheader("Our purpose", divider="orange")
-    st.markdown("Help people find relevant information in their HR documents and understand how that information supports an answer.")
+    st.markdown(
+        "Make HR information easier to find and understand. The assistant uses "
+        "**Retrieval-Augmented Generation (RAG)** to search the available documents and "
+        "give relevant passages to an AI model to help it answer your question. "
+        "Visit **Methodology** for the workflow and technical details."
+    )
 
-st.subheader("What you can do", divider="orange")
+st.subheader("What's in the knowledge library?", divider="orange")
 st.markdown("""
-- Ask questions about the documents in the knowledge library.
-- Save PDF sources to the shared document library for future visits.
-- Ask follow-up questions in the same conversation.
-- Read numbered source passages and their original PDF page references.
+The app starts with three preloaded PDFs:
+
+- **Employment Act** — `Employment-Act.pdf`
+- **CPF contributions** — `CPF_Contribution.pdf`
+- **Workplace safety and health** — `Workplace_Safety_Health.pdf`
+
+You can add text-based PDFs to test questions about other topics. Answers depend on the documents currently in the library; the app does not browse the web for updates.
 """)
 
-st.subheader("Knowledge available", divider="orange")
-st.markdown("The initial library covers employment, CPF contributions, workplace safety, tripartite guidelines, and flexible work arrangements. Answers depend on the documents currently available in Chat.")
+st.subheader("How to use the app", divider="orange")
+st.markdown("""
+1. **Open Chat.** Check **Knowledge sources → Document library** to see the available PDFs.
+2. **Ask a question.** Click a starter question or type your own in **Ask a question here...**, then press Enter or the send arrow. Wait for document preparation to finish if the controls are disabled.
+3. **Check the evidence.** Read the answer and open **View source passages** to inspect cited text, filenames, and PDF page numbers. Labels such as **[1]** connect the answer to its evidence.
+4. **Continue the conversation.** Ask a follow-up or choose **Clear chat** to start again. Clearing chat does not delete documents.
+5. **Try another source.** Download a public document as a PDF, then use **Add PDF knowledge** in the sidebar. Wait for it to be saved and prepared before asking about it. Text-based PDFs are supported up to **20 MB and 1,000 pages per file**; scanned images need OCR first.
+""")
 
-st.subheader("Using answers thoughtfully", divider="orange")
-st.markdown("Check the cited passages and document dates before acting on an answer. The assistant can make mistakes and may lack information needed for your situation. Uploaded PDFs are saved to the shared document library; their text is sent to OpenAI to support search and answers.")
+with st.container(border=True):
+    st.subheader("Managing knowledge sources", divider="orange")
+    st.markdown("""
+**Users can delete uploaded PDFs only. The three preloaded PDFs cannot be deleted.**
+
+To remove an upload, open **Knowledge sources → Document library**, choose it under **Select PDFs to delete**, and click **Delete selected PDFs**. The dropdown lists uploaded documents only. When there are no uploads, the deletion controls are disabled.
+
+Deleting an upload removes it from the shared library, search index, and extracted-text cache, and clears the current chat. Uploaded PDFs are shared with other app users, so removing one also removes it from their available knowledge sources.
+""")
+
+st.subheader("Documents to upload and test", divider="orange")
+st.markdown("Download the document to your device as a PDF before uploading it. Pasting a website link into Chat does not add it to the knowledge library.")
+
+with st.container(border=True):
+    st.subheader("PDPA advisory guidelines")
+    st.markdown("Use a public advisory document to explore questions about personal data protection.")
+    st.markdown("[Open the PDPC advisory guidelines document](https://www.pdpc.gov.sg/assets/34058be5-ae13-4c40-89e6-1c945d19f65c)")
+    st.markdown("""
+After uploading, try:
+
+- “Summarise the main points in the uploaded PDPA advisory guidelines.”
+- “What does this document say about consent when collecting personal data? Cite the relevant passages.”
+""")
+
+with st.container(border=True):
+    st.subheader("Retirement and Re-employment Act")
+    st.markdown("Use the Act from Singapore Statutes Online to test questions about retirement and re-employment. The link opens a legislation page; obtain a PDF copy before uploading. If needed, use your browser's print function and select **Save as PDF**.")
+    st.markdown("[Open the Retirement and Re-employment Act](https://sso.agc.gov.sg/Act/RRA1993)")
+    st.markdown("""
+After uploading, try:
+
+- “What does the uploaded Act say about retirement and re-employment?”
+- “What employer obligations are described in this document? Cite the relevant passages.”
+""")
+
+st.caption("These are suggested test questions, not guaranteed answers. If a detail is not covered by the uploaded document, the assistant should say so. Check the document's version, dates, and cited text.")
+
+st.subheader("Use the assistant thoughtfully", divider="orange")
+st.markdown(
+    "AI answers may be inaccurate, incomplete, or outdated and do not replace professional HR, "
+    "legal, or financial advice. Verify information with current official sources before acting. "
+    "Do not enter or upload personal, confidential, or sensitive information. Uploaded PDFs are "
+    "saved in a shared library, and document text, questions, and recent conversation are sent "
+    "to OpenAI as needed for search and answers."
+)
