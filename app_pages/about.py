@@ -58,8 +58,8 @@ with st.container(border=True):
     st.markdown("""
 After uploading, try:
 
-- “Summarise the main points in the uploaded PDPA advisory guidelines.”
-- “What does this document say about consent when collecting personal data? Cite the relevant passages.”
+- “What are the main obligations organisations must comply with under the Data Protection Provisions of the PDPA?”
+- “How must an organisation obtain valid consent from an individual for the collection, use, or disclosure of personal data under the PDPA?”
 """)
 
 with st.container(border=True):
@@ -69,8 +69,8 @@ with st.container(border=True):
     st.markdown("""
 After uploading, try:
 
-- “What does the uploaded Act say about retirement and re-employment?”
-- “What employer obligations are described in this document? Cite the relevant passages.”
+- “What factors must be considered when varying the terms and conditions in a re-employment contract under the Retirement and Re-employment Act?”
+- “What is the minimum duration for a re-employment contract unless otherwise agreed by the parties?”
 """)
 
 st.caption("These are suggested test questions, not guaranteed answers. If a detail is not covered by the uploaded document, the assistant should say so. Check the document's version, dates, and cited text.")
