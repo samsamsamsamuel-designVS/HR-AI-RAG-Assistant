@@ -34,8 +34,8 @@ settings = dotenv_values(ROOT / ".env")
 api_key = (os.getenv("OPENAI_API_KEY", settings.get("OPENAI_API_KEY") or "")).strip()
 model = st.session_state.model_name
 # Streamlit commands create the page elements in the order they run.
-st.title("HR AI Employment Assistant")
-st.caption("Ask your HR documents. Get clear answers with evidence you can check.")
+st.title("HR AI Employment Assistant 🗪")
+#st.caption("Ask your HR documents. Get clear answers with evidence you can check.")
 
 # This decorator caches the function result based on its input arguments.
 @st.cache_data(max_entries=32, show_spinner=False)
@@ -57,6 +57,11 @@ def show_evidence(answer, evidence):
                 # Keep the original citation label, even if only [2] was cited.
                 st.markdown(f"**[{i}] {display_pdf_name(chunk.source)} · PDF page {chunk.page}**")
                 st.text(chunk.text)
+
+
+def select_starter_question(question):
+    """Queue a suggested question for the next chat-page run."""
+    st.session_state.starter_question = question
 
 
 # Widgets live in app.py so their values survive navigation to other pages.
@@ -112,9 +117,39 @@ if not source_chunks and st.session_state.source_index is not None:
     index_chunks(st.session_state.source_index, [])
 
 # A welcome message appears before the first question; it is not sent to the AI.
-if not st.session_state.messages:
+can_ask = ready and bool(model.strip())
+starter_question = st.session_state.pop("starter_question", None)
+if not st.session_state.messages and not (starter_question and can_ask):
     with st.chat_message("assistant", avatar=":material/robot_2:"):
         st.markdown("How can I help? Ask about Employment Act Policies, CPF Contributions or Workplace Safety")
+    st.caption("Get started with a common question. Select one to ask the HR AI Employment Assistant.")
+    starter_topics = (
+        ("Employment Act", ":material/work:", (
+            "What are the annual leave entitlements under the Employment Act?",
+            "What are the rules for overtime pay under the Employment Act?",
+        )),
+        ("CPF contributions", ":material/savings:", (
+            "Who qualifies for CPF, and how do rates vary by age, wages, and residency?",
+            "How are employer and employee CPF contributions calculated?",
+        )),
+        ("Workplace safety", ":material/health_and_safety:", (
+            "What measures must an occupier take to protect employees from workplace hazards?",
+            "What safety measures must an occupier take to protect workers from self-acting machinery?",
+        )),
+    )
+    for topic_index, (column, (title, icon, questions)) in enumerate(zip(st.columns(3), starter_topics)):
+        with column:
+            with st.container(border=True, height="stretch"):
+                st.markdown(f"{icon} **{title}**")
+                for question_index, suggestion in enumerate(questions):
+                    st.button(
+                        suggestion,
+                        key=f"starter_{topic_index}_{question_index}",
+                        width="stretch",
+                        disabled=not can_ask,
+                        on_click=select_starter_question,
+                        args=(suggestion,),
+                    )
 
 # Redraw previous messages on every rerun, including their saved source passages.
 for message in st.session_state.messages:
@@ -126,13 +161,25 @@ for message in st.session_state.messages:
 
 # Chat stays disabled until search is ready. submit_mode prevents users from
 # interrupting an answer by submitting another question while it is streaming.
-question = st.chat_input(
-    "Ask a question. Example: What are the annual leave entitlements "
-    "for employees under the Employment Act?",
-    disabled=not ready or not model.strip(),
-    submit_mode="disable",
-    max_chars=4000,
-)
+with st.bottom:
+    question = st.chat_input(
+        "Ask a question here...",
+        disabled=not can_ask,
+        submit_mode="disable",
+        max_chars=4000,
+    )
+    st.caption(
+        "**Prototype / Proof of Concept:** This assistant is a learning and demonstration project. "
+        "AI-generated responses rely on the available documents and may contain errors, omissions, "
+        "or outdated information. They provide general information only and are not a substitute "
+        "for professional HR, legal, or financial advice. Before making employment or compliance "
+        "decisions, verify answers against the cited sources and current official guidance, "
+        "and seek advice from a qualified professional. Do not enter or upload personal, "
+        "confidential, or sensitive information. Uploaded PDFs are stored in a shared library "
+        "and are available to other users of this app."
+    )
+if starter_question and can_ask:
+    question = starter_question
 if question:
     # Send only roles and text to the AI, excluding failed turns and UI metadata.
     # Capture history before adding the new question so it is not sent twice.
