@@ -15,7 +15,7 @@ with st.container(border=True):
         "Make HR information easier to find and understand. The assistant uses "
         "**Retrieval-Augmented Generation (RAG)** to search the available documents and "
         "give relevant passages to an AI model to help it answer your question. "
-        "Visit **Methodology** for the workflow and technical details."
+        "Visit **Methodology** for the workflow, technical details and AI settings."
     )
 
 st.subheader("What's in the knowledge library?", divider="orange")
@@ -29,7 +29,7 @@ The app starts with three preloaded PDFs:
 You can add text-based PDFs to test questions about other topics. Answers depend on the documents currently in the library; the app does not browse the web for updates.
 """)
 
-st.subheader("How to use the app", divider="orange")
+st.title("How to use the app", anchor=False)
 st.markdown("""
 1. **Open Chat.** Check **Knowledge sources → Document library** to see the available PDFs.
 2. **Ask a question.** Click a starter question or type your own in **Ask a question here...**, then press Enter or the send arrow. Wait for document preparation to finish if the controls are disabled.
@@ -52,7 +52,7 @@ st.subheader("Documents to upload and test", divider="orange")
 st.markdown("Download the document to your device as a PDF before uploading it. Pasting a website link into Chat does not add it to the knowledge library.")
 
 with st.container(border=True):
-    st.subheader("PDPA advisory guidelines")
+    st.subheader("1. PDPA advisory guidelines")
     st.markdown("Use a public advisory document to explore questions about personal data protection.")
     st.markdown("[Open the PDPC advisory guidelines document](https://www.pdpc.gov.sg/assets/34058be5-ae13-4c40-89e6-1c945d19f65c)")
     st.markdown("""
@@ -63,7 +63,7 @@ After uploading, try:
 """)
 
 with st.container(border=True):
-    st.subheader("Retirement and Re-employment Act")
+    st.subheader("2. Retirement and Re-employment Act")
     st.markdown("Use the Act from Singapore Statutes Online to test questions about retirement and re-employment. The link opens a legislation page; obtain a PDF copy before uploading. If needed, use your browser's print function and select **Save as PDF**.")
     st.markdown("[Open the Retirement and Re-employment Act](https://sso.agc.gov.sg/Act/RRA1993)")
     st.markdown("""
