@@ -53,7 +53,7 @@ for title, explanation in steps:
         st.subheader(title)
         st.markdown(explanation)
 
-st.subheader("Sidebar settings", divider="orange")
+st.subheader("AI Settings", divider="orange")
 st.markdown("""
 - **Passages per answer (K):** The maximum passages returned by search, from 1 to 10; the default is 3. More passages provide more evidence to consider but do not guarantee a better answer. If fewer passages exist, search returns what is available.
 - **Temperature:** Controls variation in wording, from 0 to 1. The default, 0, favours consistency; it does not guarantee accuracy.
